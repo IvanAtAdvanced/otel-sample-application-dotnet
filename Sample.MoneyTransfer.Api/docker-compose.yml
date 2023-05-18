@@ -1,18 +1,47 @@
 version: '3.6'
 services:
   money-transfer.api:
-    image: digma/sample.money-transfer:latest
+    image: digma/sample.money-transfer:dev
     build:
       context: .
       dockerfile: ./Dockerfile
     environment:
       - Digma__URL=http://digma-collector-api:5050
-      - DEPLOYMENT_COMMIT_ID
-      - DEPLOYMENT_ENV
+      - DEPLOYMENT_COMMIT_ID=ci1
+      - DEPLOYMENT_ENV=dev
     ports:
       - "7151:7151"
     networks:
       - digma-network
+
+  money-transfer.api.test:
+    image: digma/sample.money-transfer:test
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - Digma__URL=http://digma-collector-api:5050
+      - DEPLOYMENT_COMMIT_ID=ci2
+      - DEPLOYMENT_ENV=test
+    ports:
+      - "7152:7152"
+    networks:
+      - digma-network
+
+  money-transfer.api.prod:
+    image: digma/sample.money-transfer:prod
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - Digma__URL=http://digma-collector-api:5050
+      - DEPLOYMENT_COMMIT_ID=ci3
+      - DEPLOYMENT_ENV=prod
+    ports:
+      - "7153:7153"
+    networks:
+      - digma-network
+
 networks:
   digma-network:
     external: true
